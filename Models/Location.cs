@@ -2,11 +2,13 @@
 {
     public class Location
     {
+        [Flags]
         public enum LocationType
         {
-            Huis,
-            Appartement,
-            Villa
+            Huis = 1,
+            Appartement = 2,
+            Villa = 3,
+            Hotel = 4
         }
         public enum LocationFeatures
         {
