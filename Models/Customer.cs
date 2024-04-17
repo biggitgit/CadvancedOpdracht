@@ -1,6 +1,6 @@
 ﻿namespace CadvancedOpdracht.Models
 {
-    public class Costumer
+    public class Customer
     {
         public int Id { get; set; }
         public string FirstName { get; set; }

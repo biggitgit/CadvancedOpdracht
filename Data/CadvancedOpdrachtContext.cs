@@ -16,5 +16,6 @@ namespace CadvancedOpdracht.Data
 
         public DbSet<CadvancedOpdracht.Models.Landlord> Landlord { get; set; } = default!;
         public DbSet<CadvancedOpdracht.Models.Location> Location { get; set; } = default!;
+        public DbSet<CadvancedOpdracht.Models.Image> Image { get; set; } = default!;
     }
 }

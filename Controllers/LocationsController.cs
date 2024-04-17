@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using CadvancedOpdracht.Data;
 using CadvancedOpdracht.Models;
+using CadvancedOpdracht.Repositories.LocationRepo;
 
 namespace CadvancedOpdracht.Controllers
 {
@@ -14,32 +15,31 @@ namespace CadvancedOpdracht.Controllers
     [ApiController]
     public class LocationsController : ControllerBase
     {
-        private readonly CadvancedOpdrachtContext _context;
+        private readonly LocationRepository _locationRepository;
 
-        public LocationsController(CadvancedOpdrachtContext context)
+        public LocationsController(LocationRepository locationRepository)
         {
-            _context = context;
+            _locationRepository = locationRepository;
         }
 
         // GET: api/Locations
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Location>>> GetLocation()
         {
-            return await _context.Location.ToListAsync();
+            var locations = _locationRepository.GetAll();
+            return Ok(locations);
         }
 
         // GET: api/Locations/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Location>> GetLocation(int id)
         {
-            var location = await _context.Location.FindAsync(id);
-
+            var location = _locationRepository.Get(id);
             if (location == null)
             {
                 return NotFound();
             }
-
-            return location;
+            return Ok(location);
         }
 
         // PUT: api/Locations/5
@@ -52,22 +52,13 @@ namespace CadvancedOpdracht.Controllers
                 return BadRequest();
             }
 
-            _context.Entry(location).State = EntityState.Modified;
-
             try
             {
-                await _context.SaveChangesAsync();
+                _locationRepository.Update(location);
             }
-            catch (DbUpdateConcurrencyException)
+            catch (InvalidOperationException)
             {
-                if (!LocationExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
+                return NotFound();
             }
 
             return NoContent();
@@ -78,9 +69,7 @@ namespace CadvancedOpdracht.Controllers
         [HttpPost]
         public async Task<ActionResult<Location>> PostLocation(Location location)
         {
-            _context.Location.Add(location);
-            await _context.SaveChangesAsync();
-
+            _locationRepository.Add(location);
             return CreatedAtAction("GetLocation", new { id = location.Id }, location);
         }
 
@@ -88,21 +77,22 @@ namespace CadvancedOpdracht.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteLocation(int id)
         {
-            var location = await _context.Location.FindAsync(id);
-            if (location == null)
+            try
+            {
+                _locationRepository.Delete(id);
+            }
+            catch (InvalidOperationException)
             {
                 return NotFound();
             }
-
-            _context.Location.Remove(location);
-            await _context.SaveChangesAsync();
 
             return NoContent();
         }
 
         private bool LocationExists(int id)
         {
-            return _context.Location.Any(e => e.Id == id);
+            var location = _locationRepository.Get(id);
+            return location != null;
         }
     }
 }
