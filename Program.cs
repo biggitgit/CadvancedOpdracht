@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using CadvancedOpdracht.Data;
+using CadvancedOpdracht.Controllers;
 
 namespace CadvancedOpdracht
 {
@@ -15,6 +16,16 @@ namespace CadvancedOpdracht
             // Add services to the container.
 
             builder.Services.AddControllers();
+            //builder.Services.AddCors(options =>
+            //{
+            //    options.AddPolicy("AllowSpecificOrigin",
+            //        builder =>
+            //        {
+            //            builder.WithOrigins("https://cloudbnb-df3c1.web.app")
+            //                   .AllowAnyHeader()
+            //                   .AllowAnyMethod();
+            //        });
+            //});
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
@@ -26,12 +37,14 @@ namespace CadvancedOpdracht
             {
                 app.UseSwagger();
                 app.UseSwaggerUI();
+                app.UseCors(options => options.AllowAnyHeader().AllowAnyOrigin());
             }
          
             app.UseHttpsRedirection();
 
-            app.UseAuthorization();
+            app.UseCors("AllowSpecificOrigin");
 
+            app.UseAuthorization();
 
             app.MapControllers();
 
