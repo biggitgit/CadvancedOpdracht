@@ -26,7 +26,7 @@ namespace CadvancedOpdracht.Data
 
             modelBuilder.Entity<Image>().ToTable("Image");
             modelBuilder.Entity<Image>().HasData(
-                new Image { ImageId = 1, Url = "url_van_afbeelding_1", IsCover = true },
+                new Image { ImageId = 1, Url = "https://www.seo-snel.nl/profielfoto/profielfoto.png", IsCover = true },
                 new Image { ImageId = 2, Url = "url_van_afbeelding_2", IsCover = false },
                 new Image { ImageId = 3, Url = "url_van_afbeelding_3", IsCover = true }
             );

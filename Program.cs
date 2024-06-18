@@ -42,7 +42,6 @@ namespace CadvancedOpdracht
          
             app.UseHttpsRedirection();
 
-            app.UseCors("AllowSpecificOrigin");
 
             app.UseAuthorization();
 
