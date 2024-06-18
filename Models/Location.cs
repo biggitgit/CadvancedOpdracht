@@ -29,6 +29,7 @@
         public List<Image> Images { get; set; }
         public float PricePerDay { get; set; }
         public List<Reservation> Reservations { get; set; }
+        public int LandlordId { get; set; }
         public Landlord Landlord { get; set; }
     }
 }

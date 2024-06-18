@@ -2,97 +2,163 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using CadvancedOpdracht.Data;
 using CadvancedOpdracht.Models;
-using CadvancedOpdracht.Repositories.LocationRepo;
 
 namespace CadvancedOpdracht.Controllers
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class LocationsController : ControllerBase
+    public class LocationsController : Controller
     {
-        private readonly LocationRepository _locationRepository;
+        private readonly CadvancedOpdrachtContext _context;
 
-        public LocationsController(LocationRepository locationRepository)
+        public LocationsController(CadvancedOpdrachtContext context)
         {
-            _locationRepository = locationRepository;
+            _context = context;
         }
 
-        // GET: api/Locations
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<Location>>> GetLocation()
+        // GET: Locations
+        public async Task<IActionResult> Index()
         {
-            var locations = _locationRepository.GetAll();
-            return Ok(locations);
+            var cadvancedOpdrachtContext = _context.Locations.Include(l => l.Landlord);
+            return View(await cadvancedOpdrachtContext.ToListAsync());
         }
 
-        // GET: api/Locations/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<Location>> GetLocation(int id)
+        // GET: Locations/Details/5
+        public async Task<IActionResult> Details(int? id)
         {
-            var location = _locationRepository.Get(id);
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var location = await _context.Locations
+                .Include(l => l.Landlord)
+                .FirstOrDefaultAsync(m => m.Id == id);
             if (location == null)
             {
                 return NotFound();
             }
-            return Ok(location);
+
+            return View(location);
         }
 
-        // PUT: api/Locations/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutLocation(int id, Location location)
+        // GET: Locations/Create
+        public IActionResult Create()
+        {
+            ViewData["LandlordId"] = new SelectList(_context.Landlords, "Id", "Id");
+            return View();
+        }
+
+        // POST: Locations/Create
+        // To protect from overposting attacks, enable the specific properties you want to bind to.
+        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create([Bind("Id,Title,SubTitle,Description,Type,Rooms,NumberOfGuests,Features,PricePerDay,LandlordId")] Location location)
+        {
+            if (ModelState.IsValid)
+            {
+                _context.Add(location);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
+            }
+            ViewData["LandlordId"] = new SelectList(_context.Landlords, "Id", "Id", location.LandlordId);
+            return View(location);
+        }
+
+        // GET: Locations/Edit/5
+        public async Task<IActionResult> Edit(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var location = await _context.Locations.FindAsync(id);
+            if (location == null)
+            {
+                return NotFound();
+            }
+            ViewData["LandlordId"] = new SelectList(_context.Landlords, "Id", "Id", location.LandlordId);
+            return View(location);
+        }
+
+        // POST: Locations/Edit/5
+        // To protect from overposting attacks, enable the specific properties you want to bind to.
+        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,SubTitle,Description,Type,Rooms,NumberOfGuests,Features,PricePerDay,LandlordId")] Location location)
         {
             if (id != location.Id)
             {
-                return BadRequest();
+                return NotFound();
             }
 
-            try
+            if (ModelState.IsValid)
             {
-                _locationRepository.Update(location);
+                try
+                {
+                    _context.Update(location);
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!LocationExists(location.Id))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+                return RedirectToAction(nameof(Index));
             }
-            catch (InvalidOperationException)
+            ViewData["LandlordId"] = new SelectList(_context.Landlords, "Id", "Id", location.LandlordId);
+            return View(location);
+        }
+
+        // GET: Locations/Delete/5
+        public async Task<IActionResult> Delete(int? id)
+        {
+            if (id == null)
             {
                 return NotFound();
             }
 
-            return NoContent();
-        }
-
-        // POST: api/Locations
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPost]
-        public async Task<ActionResult<Location>> PostLocation(Location location)
-        {
-            _locationRepository.Add(location);
-            return CreatedAtAction("GetLocation", new { id = location.Id }, location);
-        }
-
-        // DELETE: api/Locations/5
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteLocation(int id)
-        {
-            try
-            {
-                _locationRepository.Delete(id);
-            }
-            catch (InvalidOperationException)
+            var location = await _context.Locations
+                .Include(l => l.Landlord)
+                .FirstOrDefaultAsync(m => m.Id == id);
+            if (location == null)
             {
                 return NotFound();
             }
 
-            return NoContent();
+            return View(location);
+        }
+
+        // POST: Locations/Delete/5
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(int id)
+        {
+            var location = await _context.Locations.FindAsync(id);
+            if (location != null)
+            {
+                _context.Locations.Remove(location);
+            }
+
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
         }
 
         private bool LocationExists(int id)
         {
-            var location = _locationRepository.Get(id);
-            return location != null;
+            return _context.Locations.Any(e => e.Id == id);
         }
     }
 }
