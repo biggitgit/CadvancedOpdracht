@@ -4,6 +4,7 @@ using CadvancedOpdracht.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CadvancedOpdracht.Migrations
 {
     [DbContext(typeof(CadvancedOpdrachtContext))]
-    partial class CadvancedOpdrachtContextModelSnapshot : ModelSnapshot
+    [Migration("20240619135044_second_migration")]
+    partial class second_migration
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

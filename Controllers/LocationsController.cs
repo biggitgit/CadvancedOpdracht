@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using CadvancedOpdracht.Data;
 using CadvancedOpdracht.Models;
+using CadvancedOpdracht.Models.Dto;
+using AutoMapper;
 
 namespace CadvancedOpdracht.Controllers
 {
@@ -15,18 +17,33 @@ namespace CadvancedOpdracht.Controllers
     public class LocationsController : ControllerBase
     {
         private readonly CadvancedOpdrachtContext _context;
+        private readonly IMapper _dtoMapper;
 
-        public LocationsController(CadvancedOpdrachtContext context)
+        public LocationsController(CadvancedOpdrachtContext context, IMapper mapper)
         {
             _context = context;
+            _dtoMapper = mapper;
+        }
+        [HttpGet]
+        public IActionResult Index()
+        {
+            var locations = _context.Locations
+                .Include(l => l.Images)
+                .Include(l => l.Landlord)
+                .ToList();
+            var locationVar = _dtoMapper.Map<List<LocationDto>>(locations);
+            return Ok(locationVar);
+
         }
 
         // GET: api/Locations
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<Location>>> GetLocations()
-        {
-            return await _context.Locations.ToListAsync();
-        }
+        //[HttpGet]
+        //public async Task<ActionResult<IEnumerable<Location>>> GetLocations()
+        //{
+        //    var locations = _context.Locations.Include(l => l.Images).Include(l => l.Landlord).ToList();
+        //    var locationVar = _dtoMapper.Map<List<Location>>(locations);
+        //    return Ok(locationVar);
+        //}
         [HttpGet("GetAll")]
         public async Task<IActionResult> GetAll()
         {

@@ -16,6 +16,8 @@ namespace CadvancedOpdracht
             // Add services to the container.
 
             builder.Services.AddControllers();
+            
+            builder.Services.AddAutoMapper(typeof(Program));
             //builder.Services.AddCors(options =>
             //{
             //    options.AddPolicy("AllowSpecificOrigin",
