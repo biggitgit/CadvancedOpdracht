@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
 using CadvancedOpdracht.Data;
-using CadvancedOpdracht.Controllers;
+using Asp.Versioning;
+using Microsoft.OpenApi.Models;
 
 namespace CadvancedOpdracht
 {
@@ -13,24 +13,64 @@ namespace CadvancedOpdracht
             builder.Services.AddDbContext<CadvancedOpdrachtContext>(options =>
                 options.UseSqlServer(builder.Configuration.GetConnectionString("CadvancedOpdrachtContext") ?? throw new InvalidOperationException("Connection string 'CadvancedOpdrachtContext' not found.")));
 
-            // Add services to the container.
 
             builder.Services.AddControllers();
             
             builder.Services.AddAutoMapper(typeof(Program));
-            //builder.Services.AddCors(options =>
-            //{
-            //    options.AddPolicy("AllowSpecificOrigin",
-            //        builder =>
-            //        {
-            //            builder.WithOrigins("https://cloudbnb-df3c1.web.app")
-            //                   .AllowAnyHeader()
-            //                   .AllowAnyMethod();
-            //        });
-            //});
-            // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+
+            builder.Services.AddApiVersioning(
+                options =>
+                {
+                    options.ReportApiVersions = true;
+                    options.AssumeDefaultVersionWhenUnspecified = true;
+                    options.DefaultApiVersion = new ApiVersion(1, 0);
+                })
+            .AddApiExplorer(
+                options =>
+                {
+                    options.GroupNameFormat = "'v'VVV";
+                    options.SubstituteApiVersionInUrl = true;
+                });
+
+            builder.Services.AddProblemDetails();
             builder.Services.AddEndpointsApiExplorer();
-            builder.Services.AddSwaggerGen();
+            builder.Services.AddSwaggerGen(options =>
+            {
+                options.SwaggerDoc("v1", new OpenApiInfo
+                {
+                    Version = "v1",
+                    Title = "ToDo API",
+                    Description = "An ASP.NET Core Web API for managing ToDo items",
+                    TermsOfService = new Uri("https://example.com/terms"),
+                    Contact = new OpenApiContact
+                    {
+                        Name = "Example Contact",
+                        Url = new Uri("https://example.com/contact")
+                    },
+                    License = new OpenApiLicense
+                    {
+                        Name = "Example License",
+                        Url = new Uri("https://example.com/license")
+                    }
+                });
+                options.SwaggerDoc("v2", new OpenApiInfo
+                {
+                    Version = "v2",
+                    Title = "ToDo API v2",
+                    Description = "An ASP.NET Core Web API for managing ToDo items",
+                    TermsOfService = new Uri("https://example.com/terms"),
+                    Contact = new OpenApiContact
+                    {
+                        Name = "Example Contact",
+                        Url = new Uri("https://example.com/contact")
+                    },
+                    License = new OpenApiLicense
+                    {
+                        Name = "Example License",
+                        Url = new Uri("https://example.com/license")
+                    }
+                });
+        });
 
             var app = builder.Build();
 
@@ -38,7 +78,13 @@ namespace CadvancedOpdracht
             if (app.Environment.IsDevelopment())
             {
                 app.UseSwagger();
-                app.UseSwaggerUI();
+                app.UseSwaggerUI(
+                options =>
+                {
+                    options.SwaggerEndpoint("/swagger/v1/swagger.json", "API v1");
+                    options.SwaggerEndpoint("/swagger/v2/swagger.json", "API v2");
+              
+            });
                 app.UseCors(options => options.AllowAnyHeader().AllowAnyOrigin());
             }
          

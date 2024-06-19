@@ -2,45 +2,46 @@
 using Microsoft.EntityFrameworkCore;
 using CadvancedOpdracht.Data;
 using CadvancedOpdracht.Models;
-using CadvancedOpdracht.Models.Dto;
+using CadvancedOpdracht.Models.DtoV2;
 using AutoMapper;
 using Asp.Versioning;
 
 namespace CadvancedOpdracht.Controllers
 {
-    [ApiVersion(1.0)]
-    [Route("api/[controller]")]
+    [ApiVersion(2.0)]
+    [Route("api/Locations")]
     [ApiController]
-    public class LocationsController : ControllerBase
+    public class LocationsV2Controller : ControllerBase
     {
         private readonly CadvancedOpdrachtContext _context;
         private readonly IMapper _dtoMapper;
 
-        public LocationsController(CadvancedOpdrachtContext context, IMapper mapper)
+        public LocationsV2Controller(CadvancedOpdrachtContext context, IMapper mapper)
         {
             _context = context;
             _dtoMapper = mapper;
         }
-        [HttpGet]
 
+        // GET: api/LocationsV2
+        [HttpGet]
         public IActionResult Index()
         {
             var locations = _context.Locations
                 .Include(l => l.Images)
                 .Include(l => l.Landlord)
                 .ToList();
-            var locationDtos = _dtoMapper.Map<List<LocationDto>>(locations);
+            var locationDtos = _dtoMapper.Map<List<LocationDtoV2>>(locations);
             return Ok(locationDtos);
 
         }
-
         [HttpGet("GetAll")]
         public async Task<IActionResult> GetAll()
         {
             var locations = await _context.Locations.ToListAsync();
             return Ok(locations);
         }
-        // GET: api/Locations/5
+
+        // GET: api/LocationsV2/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Location>> GetLocation(int id)
         {
@@ -54,7 +55,7 @@ namespace CadvancedOpdracht.Controllers
             return location;
         }
 
-        // PUT: api/Locations/5
+        // PUT: api/LocationsV2/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
         public async Task<IActionResult> PutLocation(int id, Location location)
@@ -85,7 +86,7 @@ namespace CadvancedOpdracht.Controllers
             return NoContent();
         }
 
-        // POST: api/Locations
+        // POST: api/LocationsV2
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
         public async Task<ActionResult<Location>> PostLocation(Location location)
@@ -96,7 +97,7 @@ namespace CadvancedOpdracht.Controllers
             return CreatedAtAction("GetLocation", new { id = location.Id }, location);
         }
 
-        // DELETE: api/Locations/5
+        // DELETE: api/LocationsV2/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteLocation(int id)
         {
