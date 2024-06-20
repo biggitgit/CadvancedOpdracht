@@ -9,14 +9,14 @@ using Asp.Versioning;
 namespace CadvancedOpdracht.Controllers
 {
     [ApiVersion(2.0)]
-    [Route("api/Locations")]
+    [Route("api/[controller]")]
     [ApiController]
-    public class LocationsV2Controller : ControllerBase
+    public class Locations2Controller : ControllerBase
     {
         private readonly CadvancedOpdrachtContext _context;
         private readonly IMapper _dtoMapper;
 
-        public LocationsV2Controller(CadvancedOpdrachtContext context, IMapper mapper)
+        public Locations2Controller(CadvancedOpdrachtContext context, IMapper mapper)
         {
             _context = context;
             _dtoMapper = mapper;
@@ -24,15 +24,14 @@ namespace CadvancedOpdracht.Controllers
 
         // GET: api/LocationsV2
         [HttpGet]
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            var locations = _context.Locations
+            var locations = await _context.Locations
                 .Include(l => l.Images)
                 .Include(l => l.Landlord)
-                .ToList();
+                .ToListAsync();
             var locationDtos = _dtoMapper.Map<List<LocationDtoV2>>(locations);
             return Ok(locationDtos);
-
         }
         [HttpGet("GetAll")]
         public async Task<IActionResult> GetAll()
@@ -98,20 +97,20 @@ namespace CadvancedOpdracht.Controllers
         }
 
         // DELETE: api/LocationsV2/5
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteLocation(int id)
-        {
-            var location = await _context.Locations.FindAsync(id);
-            if (location == null)
-            {
-                return NotFound();
-            }
+        //[HttpDelete("{id}")]
+        //public async Task<IActionResult> DeleteLocation(int id)
+        //{
+        //    var location = await _context.Locations.FindAsync(id);
+        //    if (location == null)
+        //    {
+        //        return NotFound();
+        //    }
 
-            _context.Locations.Remove(location);
-            await _context.SaveChangesAsync();
+        //    _context.Locations.Remove(location);
+        //    await _context.SaveChangesAsync();
 
-            return NoContent();
-        }
+        //    return NoContent();
+        //}
 
         private bool LocationExists(int id)
         {

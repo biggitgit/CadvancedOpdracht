@@ -23,12 +23,12 @@ namespace CadvancedOpdracht.Controllers
         }
         [HttpGet]
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            var locations = _context.Locations
+            var locations = await _context.Locations
                 .Include(l => l.Images)
                 .Include(l => l.Landlord)
-                .ToList();
+                .ToListAsync();
             var locationDtos = _dtoMapper.Map<List<LocationDto>>(locations);
             return Ok(locationDtos);
 
@@ -96,21 +96,7 @@ namespace CadvancedOpdracht.Controllers
             return CreatedAtAction("GetLocation", new { id = location.Id }, location);
         }
 
-        // DELETE: api/Locations/5
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteLocation(int id)
-        {
-            var location = await _context.Locations.FindAsync(id);
-            if (location == null)
-            {
-                return NotFound();
-            }
-
-            _context.Locations.Remove(location);
-            await _context.SaveChangesAsync();
-
-            return NoContent();
-        }
+        
 
         private bool LocationExists(int id)
         {

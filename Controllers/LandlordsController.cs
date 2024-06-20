@@ -86,22 +86,6 @@ namespace CadvancedOpdracht.Controllers
             return CreatedAtAction("GetLandlord", new { id = landlord.Id }, landlord);
         }
 
-        // DELETE: api/Landlords/5
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteLandlord(int id)
-        {
-            var landlord = await _context.Landlords.FindAsync(id);
-            if (landlord == null)
-            {
-                return NotFound();
-            }
-
-            _context.Landlords.Remove(landlord);
-            await _context.SaveChangesAsync();
-
-            return NoContent();
-        }
-
         private bool LandlordExists(int id)
         {
             return _context.Landlords.Any(e => e.Id == id);
