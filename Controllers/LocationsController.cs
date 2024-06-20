@@ -5,6 +5,7 @@ using CadvancedOpdracht.Models;
 using CadvancedOpdracht.Models.Dto;
 using AutoMapper;
 using Asp.Versioning;
+using System.Threading;
 
 namespace CadvancedOpdracht.Controllers
 {
@@ -23,28 +24,28 @@ namespace CadvancedOpdracht.Controllers
         }
         [HttpGet]
 
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(CancellationToken cancellationToken)
         {
             var locations = await _context.Locations
                 .Include(l => l.Images)
                 .Include(l => l.Landlord)
-                .ToListAsync();
+                .ToListAsync(cancellationToken);
             var locationDtos = _dtoMapper.Map<List<LocationDto>>(locations);
             return Ok(locationDtos);
 
         }
 
         [HttpGet("GetAll")]
-        public async Task<IActionResult> GetAll()
+        public async Task<IActionResult> GetAll(CancellationToken cancellationToken)
         {
-            var locations = await _context.Locations.ToListAsync();
+            var locations = await _context.Locations.ToListAsync(cancellationToken);
             return Ok(locations);
         }
         // GET: api/Locations/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Location>> GetLocation(int id)
+        public async Task<ActionResult<Location>> GetLocation(int id, CancellationToken cancellationToken)
         {
-            var location = await _context.Locations.FindAsync(id);
+            var location = await _context.Locations.FindAsync(new object[] { id }, cancellationToken);
 
             if (location == null)
             {
@@ -57,7 +58,7 @@ namespace CadvancedOpdracht.Controllers
         // PUT: api/Locations/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutLocation(int id, Location location)
+        public async Task<IActionResult> PutLocation(int id, Location location, CancellationToken cancellationToken)
         {
             if (id != location.Id)
             {
@@ -68,7 +69,7 @@ namespace CadvancedOpdracht.Controllers
 
             try
             {
-                await _context.SaveChangesAsync();
+                await _context.SaveChangesAsync(cancellationToken);
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -88,10 +89,10 @@ namespace CadvancedOpdracht.Controllers
         // POST: api/Locations
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Location>> PostLocation(Location location)
+        public async Task<ActionResult<Location>> PostLocation(Location location, CancellationToken cancellationToken)
         {
             _context.Locations.Add(location);
-            await _context.SaveChangesAsync();
+            await _context.SaveChangesAsync(cancellationToken);
 
             return CreatedAtAction("GetLocation", new { id = location.Id }, location);
         }
