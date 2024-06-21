@@ -1,10 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using CadvancedOpdracht.Data;
 using CadvancedOpdracht.Models;
 using CadvancedOpdracht.Models.Dto;
 using AutoMapper;
 using Asp.Versioning;
+using CadvancedOpdracht.Services;
 using System.Threading;
 
 namespace CadvancedOpdracht.Controllers
@@ -14,94 +14,88 @@ namespace CadvancedOpdracht.Controllers
     [ApiController]
     public class LocationsController : ControllerBase
     {
-        private readonly CadvancedOpdrachtContext _context;
-        private readonly IMapper _dtoMapper;
+        private readonly SearchService _searchService;
 
-        public LocationsController(CadvancedOpdrachtContext context, IMapper mapper)
+        public LocationsController(SearchService searchService)
         {
-            _context = context;
-            _dtoMapper = mapper;
+            _searchService = searchService;
         }
-        [HttpGet]
 
+        [HttpGet]
         public async Task<IActionResult> Index(CancellationToken cancellationToken)
         {
-            var locations = await _context.Locations
-                .Include(l => l.Images)
-                .Include(l => l.Landlord)
-                .ToListAsync(cancellationToken);
-            var locationDtos = _dtoMapper.Map<List<LocationDto>>(locations);
-            return Ok(locationDtos);
-
+            var locations = await _searchService.GetAllLocationsWithDetailsAsync(cancellationToken);
+            return Ok(locations);
         }
 
         [HttpGet("GetAll")]
         public async Task<IActionResult> GetAll(CancellationToken cancellationToken)
         {
-            var locations = await _context.Locations.ToListAsync(cancellationToken);
+            var locations = await _searchService.GetAllLocationsAsync(cancellationToken);
             return Ok(locations);
         }
-        // GET: api/Locations/5
+
         [HttpGet("{id}")]
         public async Task<ActionResult<Location>> GetLocation(int id, CancellationToken cancellationToken)
         {
-            var location = await _context.Locations.FindAsync(new object[] { id }, cancellationToken);
-
-            if (location == null)
+            try
             {
-                return NotFound();
+                var location = await _searchService.GetLocationByIdAsync(id, cancellationToken);
+                return Ok(location);
             }
-
-            return location;
+            catch (ApplicationException ex)
+            {
+                return NotFound(ex.Message);
+            }
         }
 
-        // PUT: api/Locations/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
         public async Task<IActionResult> PutLocation(int id, Location location, CancellationToken cancellationToken)
         {
-            if (id != location.Id)
-            {
-                return BadRequest();
-            }
-
-            _context.Entry(location).State = EntityState.Modified;
-
             try
             {
-                await _context.SaveChangesAsync(cancellationToken);
+                await _searchService.UpdateLocationAsync(id, location, cancellationToken);
+                return NoContent();
             }
-            catch (DbUpdateConcurrencyException)
+            catch (ApplicationException ex)
             {
-                if (!LocationExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
+                return BadRequest(ex.Message);
             }
-
-            return NoContent();
         }
 
-        // POST: api/Locations
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
         public async Task<ActionResult<Location>> PostLocation(Location location, CancellationToken cancellationToken)
         {
-            _context.Locations.Add(location);
-            await _context.SaveChangesAsync(cancellationToken);
-
-            return CreatedAtAction("GetLocation", new { id = location.Id }, location);
+            var createdLocation = await _searchService.AddLocationAsync(location, cancellationToken);
+            return CreatedAtAction("GetLocation", new { id = createdLocation.Id }, createdLocation);
         }
 
-        
-
-        private bool LocationExists(int id)
+        [HttpPost("Search")]
+        public async Task<IActionResult> Search([FromBody] LocationSearchDto searchDto, CancellationToken cancellationToken)
         {
-            return _context.Locations.Any(e => e.Id == id);
+            var locations = await _searchService.SearchLocationsAsync(searchDto, cancellationToken);
+            return Ok(locations);
+        }
+
+        //[HttpGet("GetMaxPrice")]
+        //public async Task<IActionResult> GetMaxPrice(CancellationToken cancellationToken)
+        //{
+        //    var maxPrice = await _searchService.GetMaxPriceAsync(cancellationToken);
+        //    return Ok(new { Price = maxPrice });
+        //}
+
+        [HttpGet("GetDetails/{id}")]
+        public async Task<IActionResult> GetDetails(int id, CancellationToken cancellationToken)
+        {
+            try
+            {
+                var locationDetails = await _searchService.GetLocationDetailsAsync(id, cancellationToken);
+                return Ok(locationDetails);
+            }
+            catch (ApplicationException ex)
+            {
+                return NotFound(ex.Message);
+            }
         }
     }
 }

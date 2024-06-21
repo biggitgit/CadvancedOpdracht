@@ -2,6 +2,7 @@
 using CadvancedOpdracht.Data;
 using Asp.Versioning;
 using Microsoft.OpenApi.Models;
+using CadvancedOpdracht.Services;
 
 namespace CadvancedOpdracht
 {
@@ -17,6 +18,8 @@ namespace CadvancedOpdracht
             builder.Services.AddControllers();
             
             builder.Services.AddAutoMapper(typeof(Program));
+
+            builder.Services.AddScoped<SearchService>();
 
             builder.Services.AddApiVersioning(
                 options =>
