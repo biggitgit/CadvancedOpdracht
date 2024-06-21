@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CadvancedOpdracht.Services
 {
-    public class SearchService
+    public class SearchService : ISearchService
     {
         private readonly CadvancedOpdrachtContext _context;
         private readonly IMapper _dtoMapper;
@@ -17,7 +17,7 @@ namespace CadvancedOpdracht.Services
             _dtoMapper = mapper;
         }
 
-        public async Task<List<LocationDto>> GetAllLocationsWithDetailsAsync(CancellationToken cancellationToken)
+        public async Task<List<LocationDto>> GetLocationsStandardAsync(CancellationToken cancellationToken)
         {
             var locations = await _context.Locations
                 .Include(l => l.Images)
@@ -39,32 +39,6 @@ namespace CadvancedOpdracht.Services
                 throw new ApplicationException("Location not found for the given ID.");
             }
             return location;
-        }
-
-        public async Task UpdateLocationAsync(int id, Location location, CancellationToken cancellationToken)
-        {
-            if (id != location.Id)
-            {
-                throw new ApplicationException("Location ID mismatch.");
-            }
-
-            _context.Entry(location).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync(cancellationToken);
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!LocationExists(id))
-                {
-                    throw new ApplicationException("Location not found for the given ID.");
-                }
-                else
-                {
-                    throw;
-                }
-            }
         }
 
         public async Task<Location> AddLocationAsync(Location location, CancellationToken cancellationToken)
@@ -110,25 +84,25 @@ namespace CadvancedOpdracht.Services
             return _dtoMapper.Map<List<LocationDto>>(locations);
         }
 
-        //public async Task<decimal> GetMaxPriceAsync(CancellationToken cancellationToken)
-        //{
-        //    return await _context.Locations.MaxAsync(l => l.PricePerDay, cancellationToken);
-        //}
-
-        public async Task<LocationDetailsDto> GetLocationDetailsAsync(int id, CancellationToken cancellationToken)
+        public async Task<float> GetMaxPriceAsync(CancellationToken cancellationToken)
         {
-            var location = await _context.Locations
-                .Include(l => l.Images)
-                .Include(l => l.Landlord)
-                .FirstOrDefaultAsync(l => l.Id == id, cancellationToken);
-
-            if (location == null)
-            {
-                throw new ApplicationException("Location not found for the given ID.");
-            }
-
-            return _dtoMapper.Map<LocationDetailsDto>(location);
+            return await _context.Locations.MaxAsync(l => l.PricePerDay, cancellationToken);
         }
+
+        //public async Task<LocationDetailsDto> GetLocationDetailsAsync(int id, CancellationToken cancellationToken)
+        //{
+        //    var location = await _context.Locations
+        //        .Include(l => l.Images)
+        //        .Include(l => l.Landlord)
+        //        .FirstOrDefaultAsync(l => l.Id == id, cancellationToken);
+
+        //    if (location == null)
+        //    {
+        //        throw new ApplicationException("Location not found for the given ID.");
+        //    }
+
+        //    return _dtoMapper.Map<LocationDetailsDto>(location);
+        //}
 
         private bool LocationExists(int id)
         {

@@ -24,7 +24,7 @@ namespace CadvancedOpdracht.Controllers
         [HttpGet]
         public async Task<IActionResult> Index(CancellationToken cancellationToken)
         {
-            var locations = await _searchService.GetAllLocationsWithDetailsAsync(cancellationToken);
+            var locations = await _searchService.GetLocationsStandardAsync(cancellationToken);
             return Ok(locations);
         }
 
@@ -49,20 +49,6 @@ namespace CadvancedOpdracht.Controllers
             }
         }
 
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutLocation(int id, Location location, CancellationToken cancellationToken)
-        {
-            try
-            {
-                await _searchService.UpdateLocationAsync(id, location, cancellationToken);
-                return NoContent();
-            }
-            catch (ApplicationException ex)
-            {
-                return BadRequest(ex.Message);
-            }
-        }
-
         [HttpPost]
         public async Task<ActionResult<Location>> PostLocation(Location location, CancellationToken cancellationToken)
         {
@@ -77,25 +63,25 @@ namespace CadvancedOpdracht.Controllers
             return Ok(locations);
         }
 
-        //[HttpGet("GetMaxPrice")]
-        //public async Task<IActionResult> GetMaxPrice(CancellationToken cancellationToken)
-        //{
-        //    var maxPrice = await _searchService.GetMaxPriceAsync(cancellationToken);
-        //    return Ok(new { Price = maxPrice });
-        //}
-
-        [HttpGet("GetDetails/{id}")]
-        public async Task<IActionResult> GetDetails(int id, CancellationToken cancellationToken)
+        [HttpGet("GetMaxPrice")]
+        public async Task<IActionResult> GetMaxPrice(CancellationToken cancellationToken)
         {
-            try
-            {
-                var locationDetails = await _searchService.GetLocationDetailsAsync(id, cancellationToken);
-                return Ok(locationDetails);
-            }
-            catch (ApplicationException ex)
-            {
-                return NotFound(ex.Message);
-            }
+            var maxPrice = await _searchService.GetMaxPriceAsync(cancellationToken);
+            return Ok(new { Price = maxPrice });
         }
+
+        //[HttpGet("GetDetails/{id}")]
+        //public async Task<IActionResult> GetDetails(int id, CancellationToken cancellationToken)
+        //{
+        //    try
+        //    {
+        //        var locationDetails = await _searchService.GetLocationDetailsAsync(id, cancellationToken);
+        //        return Ok(locationDetails);
+        //    }
+        //    catch (ApplicationException ex)
+        //    {
+        //        return NotFound(ex.Message);
+        //    }
+        //}
     }
 }

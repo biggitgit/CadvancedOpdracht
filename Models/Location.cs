@@ -30,7 +30,6 @@
         public int Rooms { get; set; }
         public int NumberOfGuests { get; set; }
         public LocationFeatures Features { get; set; }
-        //public List<LocationFeatures> Features { get; set; }
         public IEnumerable<Image> Images { get; set; }
         public float PricePerDay { get; set; }
         public List<Reservation> Reservations { get; set; }
