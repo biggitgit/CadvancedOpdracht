@@ -1,12 +1,15 @@
 ﻿using CadvancedOpdracht.Models;
 using CadvancedOpdracht.Models.Dto;
+using CadvancedOpdracht.Models.DtoV2;
 
 namespace CadvancedOpdracht.Services
 {
     public interface ISearchService
     {
         public Task<List<LocationDto>> GetLocationsStandardAsync(CancellationToken cancellationToken);
-        public Task<List<Location>> GetAllLocationsAsync(CancellationToken cancellationToken);
+        Task<List<LocationDtoV2>> GetLocationsStandardV2Async(CancellationToken cancellationToken);
+        public Task<List<Location>> GetAllLocationsAsync(CancellationToken cancellationToken); 
+        Task<List<Location>> GetAllLocationsV2Async(CancellationToken cancellationToken);
         public Task<Location> GetLocationByIdAsync(int id, CancellationToken cancellationToken);
         public Task<Location> AddLocationAsync(Location location, CancellationToken cancellationToken);
         public Task<List<LocationDto>> SearchLocationsAsync(LocationSearchDto searchDto, CancellationToken cancellationToken);

@@ -2,6 +2,7 @@
 using CadvancedOpdracht.Data;
 using CadvancedOpdracht.Models;
 using CadvancedOpdracht.Models.Dto;
+using CadvancedOpdracht.Models.DtoV2;
 using Microsoft.EntityFrameworkCore;
 
 namespace CadvancedOpdracht.Services
@@ -25,8 +26,20 @@ namespace CadvancedOpdracht.Services
                 .ToListAsync(cancellationToken);
             return _dtoMapper.Map<List<LocationDto>>(locations);
         }
+        public async Task<List<LocationDtoV2>> GetLocationsStandardV2Async(CancellationToken cancellationToken)
+        {
+            var locations = await _context.Locations
+                .Include(l => l.Images)
+                .Include(l => l.Landlord)
+                .ToListAsync(cancellationToken);
+            return _dtoMapper.Map<List<LocationDtoV2>>(locations);
+        }
 
         public async Task<List<Location>> GetAllLocationsAsync(CancellationToken cancellationToken)
+        {
+            return await _context.Locations.ToListAsync(cancellationToken);
+        }
+        public async Task<List<Location>> GetAllLocationsV2Async(CancellationToken cancellationToken)
         {
             return await _context.Locations.ToListAsync(cancellationToken);
         }
@@ -104,7 +117,7 @@ namespace CadvancedOpdracht.Services
         //    return _dtoMapper.Map<LocationDetailsDto>(location);
         //}
 
-        private bool LocationExists(int id)
+        public bool LocationExists(int id)
         {
             return _context.Locations.Any(e => e.Id == id);
         }

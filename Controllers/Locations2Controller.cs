@@ -5,6 +5,7 @@ using CadvancedOpdracht.Models;
 using CadvancedOpdracht.Models.DtoV2;
 using AutoMapper;
 using Asp.Versioning;
+using CadvancedOpdracht.Services;
 
 namespace CadvancedOpdracht.Controllers
 {
@@ -13,35 +14,25 @@ namespace CadvancedOpdracht.Controllers
     [ApiController]
     public class Locations2Controller : ControllerBase
     {
-        private readonly CadvancedOpdrachtContext _context;
-        private readonly IMapper _dtoMapper;
+        private readonly SearchService _searchService;
 
-        public Locations2Controller(CadvancedOpdrachtContext context, IMapper mapper)
+        public Locations2Controller(SearchService searchService)
         {
-            _context = context;
-            _dtoMapper = mapper;
+            _searchService = searchService;
         }
 
         // GET: api/LocationsV2
         [HttpGet]
         public async Task<IActionResult> Index(CancellationToken cancellationToken)
         {
-            var locations = await _context.Locations
-                .Include(l => l.Images)
-                .Include(l => l.Landlord)
-                .ToListAsync(cancellationToken);
-            var locationDtos = _dtoMapper.Map<List<LocationDtoV2>>(locations);
-            return Ok(locationDtos);
+            var locations = await _searchService.GetLocationsStandardV2Async(cancellationToken);
+            return Ok(locations);
         }
         [HttpGet("GetAll")]
         public async Task<IActionResult> GetAll(CancellationToken cancellationToken)
         {
-            var locations = await _context.Locations.ToListAsync(cancellationToken);
+            var locations = await _searchService.GetAllLocationsAsync(cancellationToken);
             return Ok(locations);
-        }
-        private bool LocationExists(int id)
-        {
-            return _context.Locations.Any(e => e.Id == id);
         }
     }
 }
