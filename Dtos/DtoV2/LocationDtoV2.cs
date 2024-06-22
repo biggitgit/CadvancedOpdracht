@@ -1,6 +1,6 @@
 ﻿using static CadvancedOpdracht.Models.Location;
 
-namespace CadvancedOpdracht.Models.DtoV2
+namespace CadvancedOpdracht.Dtos.DtoV2
 {
     public class LocationDtoV2
     {
@@ -11,6 +11,6 @@ namespace CadvancedOpdracht.Models.DtoV2
         public string imageURL { get; set; }
         public string landlordAvatarURL { get; set; }
         public float price { get; set; }
-        public Location.LocationType type { get; set; }
+        public LocationType type { get; set; }
     }
 }

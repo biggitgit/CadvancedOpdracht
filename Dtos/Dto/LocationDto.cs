@@ -1,7 +1,8 @@
-﻿namespace CadvancedOpdracht.Models.Dto
+﻿namespace CadvancedOpdracht.Dtos.Dto
 {
     public class LocationDto
     {
+        public int id { get; set; }
         public string title { get; set; }
         public string subTitle { get; set; }
         public string description { get; set; }

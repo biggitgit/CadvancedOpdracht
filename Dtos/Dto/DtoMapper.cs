@@ -1,20 +1,23 @@
 ﻿using AutoMapper;
+using CadvancedOpdracht.Models;
 
-namespace CadvancedOpdracht.Models.DtoV2
+namespace CadvancedOpdracht.Dtos.Dto
 {
-    public class DtoMapperV2 : Profile
+    public class DtoMapper : Profile
     {
-        public DtoMapperV2()
+        public DtoMapper()
         {
-            CreateMap<Location, LocationDtoV2>()
+            CreateMap<Location, LocationDto>()
                 .ForMember(dest => dest.imageURL, opt => opt.MapFrom(src =>
                     src.Images.FirstOrDefault(i => i.IsCover).Url))
                 .ForMember(dest => dest.landlordAvatarURL, opt => opt.MapFrom(src =>
                     src.Landlord.Avatar.Url))
             .ForMember(dest => dest.price, opt => opt.MapFrom(src => src.PricePerDay));
 
-            CreateMap<Image, ImageDtoV2>();
-            CreateMap<Landlord, LandlordDtoV2>();
+            CreateMap<Image, ImageDto>();
+            CreateMap<Landlord, LandlordDto>();
+            CreateMap<Location, LocationDetailsDto>();
+
         }
     }
 }

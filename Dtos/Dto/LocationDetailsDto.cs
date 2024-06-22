@@ -1,4 +1,4 @@
-﻿namespace CadvancedOpdracht.Models.Dto
+﻿namespace CadvancedOpdracht.Dtos.Dto
 {
     public class LocationDetailsDto
     {

@@ -2,7 +2,6 @@
 using Microsoft.EntityFrameworkCore;
 using CadvancedOpdracht.Data;
 using CadvancedOpdracht.Models;
-using CadvancedOpdracht.Models.DtoV2;
 using AutoMapper;
 using Asp.Versioning;
 using CadvancedOpdracht.Services;

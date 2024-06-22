@@ -1,6 +1,6 @@
-﻿using CadvancedOpdracht.Models;
-using CadvancedOpdracht.Models.Dto;
-using CadvancedOpdracht.Models.DtoV2;
+﻿using CadvancedOpdracht.Dtos.Dto;
+using CadvancedOpdracht.Dtos.DtoV2;
+using CadvancedOpdracht.Models;
 
 namespace CadvancedOpdracht.Services
 {
@@ -14,6 +14,5 @@ namespace CadvancedOpdracht.Services
         public Task<Location> AddLocationAsync(Location location, CancellationToken cancellationToken);
         public Task<List<LocationDto>> SearchLocationsAsync(LocationSearchDto searchDto, CancellationToken cancellationToken);
         public Task<float> GetMaxPriceAsync(CancellationToken cancellationToken);
-        //public Task<LocationDetailsDto> GetLocationDetailsAsync(int id, CancellationToken cancellationToken);
     }
 }

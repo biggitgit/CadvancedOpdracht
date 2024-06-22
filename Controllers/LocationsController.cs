@@ -1,11 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using CadvancedOpdracht.Data;
 using CadvancedOpdracht.Models;
-using CadvancedOpdracht.Models.Dto;
 using AutoMapper;
 using Asp.Versioning;
 using CadvancedOpdracht.Services;
 using System.Threading;
+using CadvancedOpdracht.Dtos.Dto;
 
 namespace CadvancedOpdracht.Controllers
 {
@@ -70,18 +70,18 @@ namespace CadvancedOpdracht.Controllers
             return Ok(new { Price = maxPrice });
         }
 
-        //[HttpGet("GetDetails/{id}")]
-        //public async Task<IActionResult> GetDetails(int id, CancellationToken cancellationToken)
-        //{
-        //    try
-        //    {
-        //        var locationDetails = await _searchService.GetLocationDetailsAsync(id, cancellationToken);
-        //        return Ok(locationDetails);
-        //    }
-        //    catch (ApplicationException ex)
-        //    {
-        //        return NotFound(ex.Message);
-        //    }
-        //}
+        [HttpGet("GetDetails/{id}")]
+        public async Task<IActionResult> GetDetails(int id, CancellationToken cancellationToken)
+        {
+            try
+            {
+                var locationDetails = await _searchService.GetLocationDetailsAsync(id, cancellationToken);
+                return Ok(locationDetails);
+            }
+            catch (ApplicationException ex)
+            {
+                return NotFound(ex.Message);
+            }
+        }
     }
 }

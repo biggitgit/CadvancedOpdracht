@@ -1,4 +1,4 @@
-﻿namespace CadvancedOpdracht.Models.DtoV2
+﻿namespace CadvancedOpdracht.Dtos.DtoV2
 {
     public class LandlordDtoV2
     {

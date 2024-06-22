@@ -1,6 +1,6 @@
-﻿namespace CadvancedOpdracht.Models.DtoV2
+﻿namespace CadvancedOpdracht.Dtos.Dto
 {
-    public class ImageDtoV2
+    public class ImageDto
     {
         public string Url { get; set; }
         public bool IsCover { get; set; }
