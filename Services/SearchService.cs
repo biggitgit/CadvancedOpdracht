@@ -3,6 +3,7 @@ using CadvancedOpdracht.Data;
 using CadvancedOpdracht.Models;
 using CadvancedOpdracht.Models.Dto;
 using CadvancedOpdracht.Models.DtoV2;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace CadvancedOpdracht.Services
@@ -120,6 +121,10 @@ namespace CadvancedOpdracht.Services
         public bool LocationExists(int id)
         {
             return _context.Locations.Any(e => e.Id == id);
+        }
+        public async Task<ActionResult<IEnumerable<Landlord>>> GetLandlordsAsync(CancellationToken cancellationToken)
+        {
+            return await _context.Landlords.ToListAsync(cancellationToken);
         }
     }
 }
