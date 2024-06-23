@@ -5,7 +5,7 @@ using CadvancedOpdracht.Models;
 using CadvancedOpdracht.Repositories;
 using Microsoft.AspNetCore.Mvc;
 
-namespace CadvancedOpdracht.Services
+namespace CadvancedOpdracht.Services.Search
 {
     public class SearchService : ISearchService
     {

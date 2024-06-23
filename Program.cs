@@ -2,8 +2,8 @@
 using CadvancedOpdracht.Data;
 using Asp.Versioning;
 using Microsoft.OpenApi.Models;
-using CadvancedOpdracht.Services;
 using CadvancedOpdracht.Repositories;
+using CadvancedOpdracht.Services.Search;
 
 namespace CadvancedOpdracht
 {

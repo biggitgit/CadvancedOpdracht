@@ -1,10 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using CadvancedOpdracht.Data;
-using CadvancedOpdracht.Models;
-using AutoMapper;
-using Asp.Versioning;
-using CadvancedOpdracht.Services;
+﻿using Asp.Versioning;
+using CadvancedOpdracht.Services.Search;
+using Microsoft.AspNetCore.Mvc;
 
 namespace CadvancedOpdracht.Controllers
 {
