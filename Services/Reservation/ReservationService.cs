@@ -29,7 +29,7 @@ namespace CadvancedOpdracht.Services.Reservation
             var amountOfDaysDays = (requestDto.EndDate - requestDto.StartDate).Days;
             float pricePerDay = location.PricePerDay;
             float discount = requestDto.Discount ?? 0;
-            float totalPrice = (pricePerDay * amountOfDaysDays) - discount;
+            float priceForAllDays = (pricePerDay * amountOfDaysDays) - discount;
 
             var reservation = new Models.Reservation
             {
@@ -46,7 +46,7 @@ namespace CadvancedOpdracht.Services.Reservation
             {
                 LocationName = location.Title,
                 CustomerName = $"{customer.FirstName} {customer.LastName}",
-                Price = totalPrice,
+                Price = priceForAllDays,
                 Discount = reservation.Discount
             };
         }
