@@ -10,19 +10,11 @@ namespace CadvancedOpdracht.Controllers
     [ApiController]
     public class LandlordsController : ControllerBase
     {
-        private readonly SearchService _searchService;
+        private readonly ISearchService _searchService;
 
-        public LandlordsController(SearchService searchService)
+        public LandlordsController(ISearchService searchService)
         {
             _searchService = searchService;
-        }
-
-        // GET: api/Landlords
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<Landlord>>> GetLandlords(CancellationToken cancellationToken)
-        {
-            var landlords = await _searchService.GetLandlordsAsync(cancellationToken);
-            return Ok(landlords);
         }
     }
 }

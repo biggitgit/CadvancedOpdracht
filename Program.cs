@@ -4,6 +4,7 @@ using Asp.Versioning;
 using Microsoft.OpenApi.Models;
 using CadvancedOpdracht.Repositories;
 using CadvancedOpdracht.Services.Search;
+using CadvancedOpdracht.Services.Reservation;
 
 namespace CadvancedOpdracht
 {
@@ -21,7 +22,8 @@ namespace CadvancedOpdracht
             builder.Services.AddAutoMapper(typeof(Program));
 
             builder.Services.AddScoped<IFullRepository, FullRepository>();
-            builder.Services.AddScoped<SearchService>();
+            builder.Services.AddScoped<ISearchService, SearchService>();
+            builder.Services.AddScoped<IReservationService, ReservationService>();
 
             builder.Services.AddApiVersioning(
                 options =>

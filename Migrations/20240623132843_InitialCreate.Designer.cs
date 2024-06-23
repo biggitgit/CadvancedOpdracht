@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CadvancedOpdracht.Migrations
 {
     [DbContext(typeof(CadvancedOpdrachtContext))]
-    [Migration("20240621131651_InitialCreate")]
+    [Migration("20240623132843_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -527,27 +527,27 @@ namespace CadvancedOpdracht.Migrations
                             Id = 1,
                             CustomerId = 1,
                             Discount = 10f,
-                            EndDate = new DateTime(2024, 6, 28, 15, 16, 50, 277, DateTimeKind.Local).AddTicks(2991),
+                            EndDate = new DateTime(2024, 6, 30, 15, 28, 41, 639, DateTimeKind.Local).AddTicks(1322),
                             LocationId = 1,
-                            StartDate = new DateTime(2024, 6, 21, 15, 16, 50, 277, DateTimeKind.Local).AddTicks(2930)
+                            StartDate = new DateTime(2024, 6, 23, 15, 28, 41, 639, DateTimeKind.Local).AddTicks(1269)
                         },
                         new
                         {
                             Id = 2,
                             CustomerId = 2,
                             Discount = 5f,
-                            EndDate = new DateTime(2024, 7, 8, 15, 16, 50, 277, DateTimeKind.Local).AddTicks(3001),
+                            EndDate = new DateTime(2024, 7, 10, 15, 28, 41, 639, DateTimeKind.Local).AddTicks(1331),
                             LocationId = 2,
-                            StartDate = new DateTime(2024, 7, 1, 15, 16, 50, 277, DateTimeKind.Local).AddTicks(2998)
+                            StartDate = new DateTime(2024, 7, 3, 15, 28, 41, 639, DateTimeKind.Local).AddTicks(1328)
                         },
                         new
                         {
                             Id = 3,
                             CustomerId = 3,
                             Discount = 15f,
-                            EndDate = new DateTime(2024, 7, 18, 15, 16, 50, 277, DateTimeKind.Local).AddTicks(3009),
+                            EndDate = new DateTime(2024, 7, 20, 15, 28, 41, 639, DateTimeKind.Local).AddTicks(1336),
                             LocationId = 3,
-                            StartDate = new DateTime(2024, 7, 11, 15, 16, 50, 277, DateTimeKind.Local).AddTicks(3006)
+                            StartDate = new DateTime(2024, 7, 13, 15, 28, 41, 639, DateTimeKind.Local).AddTicks(1334)
                         });
                 });
 

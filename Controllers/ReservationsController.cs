@@ -1,26 +1,37 @@
-﻿using CadvancedOpdracht.Data;
+﻿using Asp.Versioning;
+using CadvancedOpdracht.Data;
+using CadvancedOpdracht.Dtos.Dto;
 using CadvancedOpdracht.Models;
+using CadvancedOpdracht.Services.Reservation;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace CadvancedOpdracht.Controllers
 {
+    [ApiVersion(1.0)]
     [Route("api/[controller]")]
     [ApiController]
     public class ReservationsController : ControllerBase
     {
-        private readonly CadvancedOpdrachtContext _context;
+        private readonly IReservationService _reservationService;
 
-        public ReservationsController(CadvancedOpdrachtContext context)
+        public ReservationsController(IReservationService reservationService)
         {
-            _context = context;
+            _reservationService = reservationService;
         }
 
-        // GET: api/Reservations
+        // POST: api/Reservations
         [HttpPost]
-        public async Task<ActionResult<IEnumerable<Reservation>>> GetReservations()
+        public async Task<ActionResult<ReservationResponseDto>> CreateReservation(ReservationRequestDto requestDto)
         {
-            return await _context.Reservations.ToListAsync();
+            var responseDto = await _reservationService.CreateReservationAsync(requestDto);
+
+            if (responseDto == null)
+            {
+                return BadRequest("Reservation could not be created.");
+            }
+
+            return Ok(responseDto);
         }
     }
 }

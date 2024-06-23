@@ -9,9 +9,9 @@ namespace CadvancedOpdracht.Controllers
     [ApiController]
     public class Locations2Controller : ControllerBase
     {
-        private readonly SearchService _searchService;
+        private readonly ISearchService _searchService;
 
-        public Locations2Controller(SearchService searchService)
+        public Locations2Controller(ISearchService searchService)
         {
             _searchService = searchService;
         }

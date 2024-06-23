@@ -11,9 +11,9 @@ namespace CadvancedOpdracht.Controllers
     [ApiController]
     public class LocationsController : ControllerBase
     {
-        private readonly SearchService _searchService;
+        private readonly ISearchService _searchService;
 
-        public LocationsController(SearchService searchService)
+        public LocationsController(ISearchService searchService)
         {
             _searchService = searchService;
         }

@@ -108,6 +108,27 @@ namespace CadvancedOpdracht.Repositories
             }
             return unavailableDates;
         }
+        public async Task<Customer> GetCustomerAsync(string email, string firstName, string lastName, CancellationToken cancellationToken)
+        {
+            var customer = await _context.Customers.FirstOrDefaultAsync(c => c.Email == email, cancellationToken);
+            if (customer == null)
+            {
+                customer = new Customer
+                {
+                    Email = email,
+                    FirstName = firstName,
+                    LastName = lastName
+                };
+                _context.Customers.Add(customer);
+                await _context.SaveChangesAsync(cancellationToken);
+            }
+            return customer;
+        }
+        public async Task AddReservationAsync(Reservation reservation, CancellationToken cancellationToken)
+        {
+            _context.Reservations.Add(reservation);
+            await _context.SaveChangesAsync(cancellationToken);
+        }
     }
 
 }

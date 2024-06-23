@@ -14,5 +14,7 @@ namespace CadvancedOpdracht.Repositories
         bool LocationExists(int id);
         Task<List<Location>> SearchLocationsAsync(LocationSearchDto searchDto, CancellationToken cancellationToken);
         Task<List<DateTime>> GetUnavailableDatesAsync(int id, CancellationToken cancellationToken);
+        Task<Customer> GetCustomerAsync(string email, string firstName, string lastName, CancellationToken cancellationToken);
+        Task AddReservationAsync(Reservation reservation, CancellationToken cancellationToken);
     }
 }

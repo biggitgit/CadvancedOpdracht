@@ -199,9 +199,9 @@ namespace CadvancedOpdracht.Migrations
                 columns: new[] { "Id", "CustomerId", "Discount", "EndDate", "LocationId", "StartDate" },
                 values: new object[,]
                 {
-                    { 1, 1, 10f, new DateTime(2024, 6, 28, 15, 16, 50, 277, DateTimeKind.Local).AddTicks(2991), 1, new DateTime(2024, 6, 21, 15, 16, 50, 277, DateTimeKind.Local).AddTicks(2930) },
-                    { 2, 2, 5f, new DateTime(2024, 7, 8, 15, 16, 50, 277, DateTimeKind.Local).AddTicks(3001), 2, new DateTime(2024, 7, 1, 15, 16, 50, 277, DateTimeKind.Local).AddTicks(2998) },
-                    { 3, 3, 15f, new DateTime(2024, 7, 18, 15, 16, 50, 277, DateTimeKind.Local).AddTicks(3009), 3, new DateTime(2024, 7, 11, 15, 16, 50, 277, DateTimeKind.Local).AddTicks(3006) }
+                    { 1, 1, 10f, new DateTime(2024, 6, 30, 15, 28, 41, 639, DateTimeKind.Local).AddTicks(1322), 1, new DateTime(2024, 6, 23, 15, 28, 41, 639, DateTimeKind.Local).AddTicks(1269) },
+                    { 2, 2, 5f, new DateTime(2024, 7, 10, 15, 28, 41, 639, DateTimeKind.Local).AddTicks(1331), 2, new DateTime(2024, 7, 3, 15, 28, 41, 639, DateTimeKind.Local).AddTicks(1328) },
+                    { 3, 3, 15f, new DateTime(2024, 7, 20, 15, 28, 41, 639, DateTimeKind.Local).AddTicks(1336), 3, new DateTime(2024, 7, 13, 15, 28, 41, 639, DateTimeKind.Local).AddTicks(1334) }
                 });
 
             migrationBuilder.CreateIndex(
