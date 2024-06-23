@@ -86,5 +86,9 @@ namespace CadvancedOpdracht.Services
         {
             return await _repository.GetAllLandlordsAsync(cancellationToken);
         }
+        public async Task<List<DateTime>> GetUnavailableDatesAsync(int locationId, CancellationToken cancellationToken)
+        {
+            return await _repository.GetUnavailableDatesAsync(locationId, cancellationToken);
+        }
     }
 }

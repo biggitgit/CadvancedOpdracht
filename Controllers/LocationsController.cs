@@ -83,5 +83,18 @@ namespace CadvancedOpdracht.Controllers
                 return NotFound(ex.Message);
             }
         }
+        [HttpGet("UnAvailableDates/{id}")]
+        public async Task<IActionResult> GetUnavailableDates(int id, CancellationToken cancellationToken)
+        {
+            try
+            {
+                var unavailableDates = await _searchService.GetUnavailableDatesAsync(id, cancellationToken);
+                return Ok(new { UnAvailableDates = unavailableDates });
+            }
+            catch (ApplicationException ex)
+            {
+                return NotFound(ex.Message);
+            }
+        }
     }
 }

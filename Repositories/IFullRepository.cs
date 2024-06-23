@@ -13,5 +13,6 @@ namespace CadvancedOpdracht.Repositories
         Task<List<Landlord>> GetAllLandlordsAsync(CancellationToken cancellationToken);
         bool LocationExists(int id);
         Task<List<Location>> SearchLocationsAsync(LocationSearchDto searchDto, CancellationToken cancellationToken);
+        Task<List<DateTime>> GetUnavailableDatesAsync(int id, CancellationToken cancellationToken);
     }
 }

@@ -2,10 +2,6 @@
 using CadvancedOpdracht.Dtos.Dto;
 using CadvancedOpdracht.Models;
 using Microsoft.EntityFrameworkCore;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace CadvancedOpdracht.Repositories
 {
@@ -60,39 +56,58 @@ namespace CadvancedOpdracht.Repositories
             return _context.Locations.Any(e => e.Id == id);
         }
 
-        public async Task<List<Location>> SearchLocationsAsync(LocationSearchDto searchDto, CancellationToken cancellationToken)
+        public async Task<List<Location>> SearchLocationsAsync(LocationSearchDto sDto, CancellationToken cancellationToken)
         {
-            var query = _context.Locations.AsQueryable();
+            var searchData = _context.Locations.AsQueryable();
 
-            if (searchDto.Features.HasValue)
+            if (sDto.Features.HasValue)
             {
-                query = query.Where(l => (int)l.Features == searchDto.Features.Value);
+                searchData = searchData.Where(l => (int)l.Features == sDto.Features.Value);
             }
 
-            if (searchDto.Type.HasValue)
+            if (sDto.Type.HasValue)
             {
-                query = query.Where(l => (int)l.Type == searchDto.Type.Value);
+                searchData = searchData.Where(l => (int)l.Type == sDto.Type.Value);
             }
 
-            if (searchDto.Rooms.HasValue)
+            if (sDto.Rooms.HasValue)
             {
-                query = query.Where(l => l.Rooms >= searchDto.Rooms.Value);
+                searchData = searchData.Where(l => l.Rooms >= sDto.Rooms.Value);
             }
 
-            if (searchDto.MinPrice.HasValue)
+            if (sDto.MinPrice.HasValue)
             {
-                query = query.Where(l => l.PricePerDay >= searchDto.MinPrice.Value);
+                searchData = searchData.Where(l => l.PricePerDay >= sDto.MinPrice.Value);
             }
 
-            if (searchDto.MaxPrice.HasValue)
+            if (sDto.MaxPrice.HasValue)
             {
-                query = query.Where(l => l.PricePerDay <= searchDto.MaxPrice.Value);
+                searchData = searchData.Where(l => l.PricePerDay <= sDto.MaxPrice.Value);
             }
 
-            return await query
+            return await searchData
                 .Include(l => l.Images)
                 .Include(l => l.Landlord)
                 .ToListAsync(cancellationToken);
         }
+        public async Task<List<DateTime>> GetUnavailableDatesAsync(int id, CancellationToken cancellationToken)
+        {
+            var reservations = await _context.Reservations
+                .Where(r => r.LocationId == id)
+                .Select(r => new { r.StartDate, r.EndDate })
+                .ToListAsync(cancellationToken);
+
+            var unavailableDates = new List<DateTime>();
+
+            foreach (var reservation in reservations)
+            {
+                for (var date = reservation.StartDate; date <= reservation.EndDate; date = date.AddDays(1))
+                {
+                    unavailableDates.Add(date);
+                }
+            }
+            return unavailableDates;
+        }
     }
+
 }
