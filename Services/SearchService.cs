@@ -62,9 +62,10 @@ namespace CadvancedOpdracht.Services
             return _dtoMapper.Map<List<LocationDto>>(locations);
         }
 
-        public async Task<float> GetMaxPriceAsync(CancellationToken cancellationToken)
+        public async Task<MaxPriceDto> GetMaxPriceAsync(CancellationToken cancellationToken)
         {
-            return await _repository.GetMaxPriceAsync(cancellationToken);
+            var maxPrice = await _repository.GetMaxPriceAsync(cancellationToken);
+            return new MaxPriceDto { Price = maxPrice };
         }
 
         public async Task<LocationDetailsDto> GetLocationDetailsAsync(int id, CancellationToken cancellationToken)
@@ -86,9 +87,10 @@ namespace CadvancedOpdracht.Services
         {
             return await _repository.GetAllLandlordsAsync(cancellationToken);
         }
-        public async Task<List<DateTime>> GetUnavailableDatesAsync(int locationId, CancellationToken cancellationToken)
+        public async Task<UnAvailableDto> GetUnavailableDatesAsync(int locationId, CancellationToken cancellationToken)
         {
-            return await _repository.GetUnavailableDatesAsync(locationId, cancellationToken);
+            var unAvDates = await _repository.GetUnavailableDatesAsync(locationId, cancellationToken);
+            return new UnAvailableDto { UnAvailableDates = unAvDates };
         }
     }
 }

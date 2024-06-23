@@ -12,7 +12,8 @@ namespace CadvancedOpdracht.Services
         Task<List<Location>> GetAllLocationsV2Async(CancellationToken cancellationToken);
         public Task<Location> GetLocationByIdAsync(int id, CancellationToken cancellationToken);
         public Task<Location> AddLocationAsync(Location location, CancellationToken cancellationToken);
-        public Task<List<LocationDto>> SearchLocationsAsync(LocationSearchDto searchDto, CancellationToken cancellationToken);
-        public Task<float> GetMaxPriceAsync(CancellationToken cancellationToken);
+        public Task<List<LocationDto>> SearchLocationsAsync(LocationSearchDto searchDto, CancellationToken cancellationToken); 
+        Task<MaxPriceDto> GetMaxPriceAsync(CancellationToken cancellationToken);
+
     }
 }

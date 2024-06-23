@@ -66,9 +66,10 @@ namespace CadvancedOpdracht.Controllers
         [HttpGet("GetMaxPrice")]
         public async Task<IActionResult> GetMaxPrice(CancellationToken cancellationToken)
         {
-            var maxPrice = await _searchService.GetMaxPriceAsync(cancellationToken);
-            return Ok(new { Price = maxPrice });
+            var maxPriceDto = await _searchService.GetMaxPriceAsync(cancellationToken);
+            return Ok(maxPriceDto);
         }
+
 
         [HttpGet("GetDetails/{id}")]
         public async Task<IActionResult> GetDetails(int id, CancellationToken cancellationToken)
@@ -88,8 +89,8 @@ namespace CadvancedOpdracht.Controllers
         {
             try
             {
-                var unavailableDates = await _searchService.GetUnavailableDatesAsync(id, cancellationToken);
-                return Ok(new { UnAvailableDates = unavailableDates });
+                var UnAvDto = await _searchService.GetUnavailableDatesAsync(id, cancellationToken);
+                return Ok(UnAvDto);
             }
             catch (ApplicationException ex)
             {
